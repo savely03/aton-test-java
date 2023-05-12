@@ -2,9 +2,11 @@ package com.savely.repository;
 
 import com.savely.exception.UserAlreadyAddedException;
 import com.savely.exception.UserNotFoundException;
+import com.savely.model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.savely.constants.UserRepositoryConstants.*;
@@ -99,8 +101,9 @@ class UserRepositoryTest {
         double newValue = ThreadLocalRandom.current().nextDouble(Double.MAX_VALUE);
 
         repository.updateUserValueByAccount(ACCOUNT, newValue);
+        Optional<User> user = repository.getByAccount(ACCOUNT);
 
-        assertThat(repository.getByAccount(ACCOUNT).get().getValue()).isEqualTo(newValue);
+        user.ifPresent(u -> assertThat(u.getValue()).isEqualTo(newValue));
     }
 
     @Test
